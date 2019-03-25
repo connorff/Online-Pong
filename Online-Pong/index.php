@@ -1,39 +1,23 @@
-<?php
-session_start();
-if (!isset($_SESSION["username"])){
-    header("Location: ./login.php");
+<script>
+checkOnline();
+
+function checkOnline(){
+
+    let xhr;
+    if (window.XMLHttpRequest){
+        xhr = new XMLHttpRequest();
+    }
+    else {
+        xhr = new ActiveXObject("Microsoft.XMLHttp");
+    }
+    xhr.open("GET", "data-parser.php?checkOnline=true", true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200){
+            console.log(this.responseText);
+        }
+    }
+
+    xhr.send();
 }
-?>
-<!DOCTYPE html>
-<style type="text/css" media="all">
-html, body {
-    overflow: hidden;
-}
-#canvas {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border: solid black 2px;
-    margin: 0;
-}
-html {
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-}
- html, body {
-    height: 100%;
-    margin: 0;
- }
-</style>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pong</title>
-</head>
-<body>
-<canvas id="canvas" width="100%" height="100%"></canvas>
-</body>
-<script src="main.js" type="application/javascript" charset="utf-8"></script>
-</html>
+</script>

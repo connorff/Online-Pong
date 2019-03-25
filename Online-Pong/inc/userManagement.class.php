@@ -56,6 +56,10 @@ class User {
             return "User already exists!";
         }
 
+        if (!$this->checkEmail($email)){
+            return "Invalid email";
+        }
+
         $sql = "INSERT INTO users (username, hashedPassword, email) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $password = password_hash($password, PASSWORD_DEFAULT);
@@ -63,5 +67,9 @@ class User {
         $stmt->execute([$username, $password, $email]);
 
         return true;
+    }
+
+    public function checkEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 }

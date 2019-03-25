@@ -16,3 +16,8 @@ CREATE TABLE users (
     email VARCHAR(256) NOT NULL,
     hashedPassword VARCHAR(256) NOT NULL
 )
+
+CREATE TABLE follow (
+    username VARCHAR(35) NOT NULL,
+    follow VARCHAR(35) NOT NULL
+)
