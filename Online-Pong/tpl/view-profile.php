@@ -16,6 +16,13 @@ $req->execute([$dataArr["id"]]);
 
 $rowCount = $req->rowCount();
 
+$sql = "SELECT COUNT(*) FROM followRel WHERE user1=? and user2=?";
+$stmt = $conn->prepare($sql);
+
+$stmt->execute([$_SESSION["id"], dataArr["id"]]);
+
+$followsAlready = $stmt->fetch();
+
 if (!$rowCount)
     header("Location: search.php");
 
