@@ -1,4 +1,5 @@
 <?php
+session_start();
 $dataArr = $_GET;
 require "./inc/userManagement.class.php";
 
@@ -17,9 +18,9 @@ $req->execute([$dataArr["id"]]);
 $rowCount = $req->rowCount();
 
 $sql = "SELECT COUNT(*) FROM followRel WHERE user1=? and user2=?";
-$stmt = $conn->prepare($sql);
+$stmt = $User->conn->prepare($sql);
 
-$stmt->execute([$_SESSION["id"], dataArr["id"]]);
+$stmt->execute([$_SESSION["id"], $dataArr["id"]]);
 
 $followsAlready = $stmt->fetch();
 

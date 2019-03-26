@@ -14,7 +14,9 @@ if (isset($_POST["submit"])){
     }
     else {
         $_SESSION["username"] = $dataArr["username"];
-        header("Location: ./index.php");
+        $_SESSION["id"] = $id;
+
+        header("Location: ./game.php");
     }
 }
 ?>

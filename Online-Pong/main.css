@@ -65,3 +65,81 @@ body {
   width: 100%;
   margin: 0;
 }
+
+.image-cropper {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+.profile-pic {
+  display: block;
+  margin: 0 auto;
+  margin-left: -40%;
+  height: 100%;
+  width: auto;
+}
+
+.profile-username {
+  text-align: center;
+  font-size: 7em;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+.fade-text {
+  animation-name: fadeOut;
+  animation-duration: .5s;
+}
+
+.request-follow-button{
+  background-color: blue;
+  color: white;
+  border: solid blue 2px;
+  border-radius: .5em;
+  width: auto;
+  height: auto;
+  font-size: 2em;
+  padding: .2em .5em .2em .5em;
+}
+.request-unfollow-button{
+  display: inline-block;
+  background-color: white;
+  color: darkblue;
+  border: solid blue 2px;
+  border-radius: .5em;
+  width: auto;
+  height: auto;
+  font-size: 2em;
+  padding: .2em .5em .2em .5em;
+}
+.request-follow-button:hover{
+  animation-name: follow-hover;
+  animation-duration: .2s;
+  background-color: white;
+  color: blue;
+}
+
+@keyframes follow-hover{
+  from {background-color: blue;}
+  to {background-color: white;}
+  from {color: white;}
+  to {color: blue;}
+}
+
+.button-wrapper {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.button-wrapper-second {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}

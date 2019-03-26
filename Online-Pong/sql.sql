@@ -14,7 +14,9 @@ CREATE TABLE users (
     id INT(6) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(35) NOT NULL,
     email VARCHAR(256) NOT NULL,
-    hashedPassword VARCHAR(256) NOT NULL
+    hashedPassword VARCHAR(256) NOT NULL,
+    wins INT(6) NOT NULL,
+    lastOn INT(11) NOT NULL
 )
 
 CREATE TABLE follow (
@@ -29,3 +31,8 @@ CREATE TABLE gameReq (
 )
 
 INSERT INTO gameReq (timeReq, orig, req) VALUES (100, 1, 2)
+
+CREATE TABLE followRel (
+    user1 INT(10) NOT NULL,
+    user2 INT(10) NOT NULL
+);

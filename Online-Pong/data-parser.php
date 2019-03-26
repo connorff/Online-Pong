@@ -102,4 +102,63 @@ if (isset($_GET["reqGame"])){
 
     echo 1;
 }
+
+//code for following and unfollowing a username
+if (isset($_GET["followUser"])){
+    $id = $_SESSION["id"];
+    $followId = $_GET["followUser"];
+    $followBool = $_GET["follow"];
+
+    if (!isset($_GET["follow"])){
+        echo 0;
+        return;
+    }
+    $followBool = $_GET["follow"];
+    if (!filter_var($followId, FILTER_VALIDATE_INT)){
+        echo 0;
+        return;
+    }
+    if (!filter_var($followBool, FILTER_VALIDATE_BOOLEAN)){
+        echo 0;
+        return;
+    }
+    
+    $sql = "SELECT COUNT(*) FROM followRel WHERE user1=? AND WHERE user2=?";
+    $req = $conn->prepare($sql);
+    $req->execute([$id, $followId]);
+    
+    //if the user already follows them
+    if ($req->fetch()){
+        if(!$filterBool){
+            $sql = "DELETE FROM followRel WHERE user1=? AND WHERE user2=?";
+            $stmt = $conn->prepare($sql);
+            
+            if($stmt->execute([$id, $followId])){
+                echo 1;
+                return;    
+            }
+            else {
+                echo 0;
+                return;
+            }
+        }
+        else {
+            echo 0;
+            return;
+        }
+    }
+    
+    //follows the user
+    $sql = "INSERT INTO followRel (user1, user2) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    
+    if($stmt->execute([$id, $followId])){
+        echo 1;
+        return;
+    }
+    else {
+        echo 0;
+        return;
+    }
+}
 ?>
