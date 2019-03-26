@@ -66,4 +66,40 @@ if (isset($_GET["checkOnline"])){
         echo $lastOn;
     }
 }
+
+//code for a live search of usernames
+if (isset($_GET["search"])){
+    $dataArr = $_GET;
+
+    $sql = "SELECT username, wins, id, lastOn FROM users WHERE username LIKE ? OR username LIKE ? OR username LIKE ?";
+    $search = $conn->prepare($sql);
+
+    $search->execute(["%" . $dataArr["search"], $dataArr["search"] . "%", "%" . $dataArr["search"] . "%"]);
+
+    $results = $search->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($results);
+}
+
+//code for requesting a game with someone
+if (isset($_GET["reqGame"])){
+    $sql2 = "SELECT COUNT(*) FROM gameReq WHERE orig = ? AND req = ?";
+
+    $id = $_SESSION["id"];
+
+    $req = $conn->prepare($sql2);
+    $req->execute([$id, $_GET["reqGame"]]);
+
+    if ($req->fetch()[0]){
+        echo 0;
+        return;
+    }
+
+    $sql = "INSERT INTO gameReq (timeReq, orig, req) VALUES (?, ?, ?)";
+
+    $req = $conn->prepare($sql);
+    $req->execute([time(), $id, $_GET["reqGame"]]);
+
+    echo 1;
+}
 ?>

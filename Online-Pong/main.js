@@ -51,7 +51,7 @@ switch (traj){
 
 //manages keyboard events
 
-document.onkeydown = function (e) {
+document.onkeyup = function (e) {
     switch(e.keyCode) {
         //when up arrow is pressed
         case 38:

@@ -21,3 +21,11 @@ CREATE TABLE follow (
     username VARCHAR(35) NOT NULL,
     follow VARCHAR(35) NOT NULL
 )
+
+CREATE TABLE gameReq (
+    timeReq INT(11) NOT NULL,
+    orig INT(6) NOT NULL,
+    req INT(6) NOT NULL
+)
+
+INSERT INTO gameReq (timeReq, orig, req) VALUES (100, 1, 2)

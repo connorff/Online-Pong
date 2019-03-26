@@ -3,6 +3,7 @@ session_start();
 require "./inc/userManagement.class.php";
 $dataArr = $_POST;
 $errorArr = [];
+$conn = new PDO("mysql:host=localhost;dbname=pong-game", "pong", "pongPassBoys");
 
 if (isset($_POST["submit"])){
     $user = new User();
@@ -11,7 +12,15 @@ if (isset($_POST["submit"])){
     
     if (($signin !== "Password incorrect") && ($signin !== "User not found")){
         $_SESSION["username"] = $dataArr["username"];
-        header("Location: ./index.php");
+
+        $sql1 = "SELECT id FROM users WHERE username = ?";
+        $getId = $conn->prepare($sql1);
+        $getId->execute([$_SESSION["username"]]);
+
+        $id = $getId->fetch()[0];
+        $_SESSION["id"] = $id;
+
+        header("Location: ./game.php");
     }
     else {
         $errorArr["login"] = $signin; 
