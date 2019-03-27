@@ -22,7 +22,7 @@ $stmt = $User->conn->prepare($sql);
 
 $stmt->execute([$_SESSION["id"], $dataArr["id"]]);
 
-$followsAlready = $stmt->fetch();
+$followsAlready = $stmt->fetch()[0];
 
 if (!$rowCount)
     header("Location: search.php");
