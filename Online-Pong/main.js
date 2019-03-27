@@ -34,6 +34,9 @@ let paddle2 = [canvasW * (48/50), canvasH / 2 - (paddleSize[0] / 2)];
 //sets the trajectory of the ball
 let traj = Math.floor(Math.random() * 3);
 
+//creates a variable to store the y value from last refresh
+let storedY = paddleq[1];
+
 switch (traj){
     case 0:
         traj = [-10, -10];
@@ -50,7 +53,6 @@ switch (traj){
 }
 
 //manages keyboard events
-
 document.onkeyup = function (e) {
     switch(e.keyCode) {
         //when up arrow is pressed
@@ -111,8 +113,26 @@ function draw() {
     if (ball[1] + 40 >= canvasH || ball[1] - 40 <= 0){
         traj[1] = -traj[1];
     }
+    
+    if (paddle1[1] !== storedY){
+        getData(true);
+    }
+    else {
+        storedY = paddle1[1];
+        getData(false);
+    }
+}
 
-    xhr.open("GET", `data-parser.php?paddleY=${canvasH / paddle2[1]}`, true);
+function getData(send){
+    if (!typeof send === 'boolean')
+        send = false;
+    
+    if(send){
+        xhr.open("GET", `data-parser.php?paddleY=${canvasH / paddle2[1]}`, true);
+    }
+    else {
+        xhr.open("GET", `data-parser.php?game=${true}`, true);
+    }
 
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200){
