@@ -17,10 +17,8 @@ if (isset($_GET["paddleY"])){
     $dataArr = $_GET;
     $dataArr["username"] = $_SESSION["username"];
 
-    echo $dataArr["paddleY"];
-
     $sql = "UPDATE games SET paddle" . $_SESSION["player"] . " = ?  WHERE gameID=?";
-    $sql2 = "SELECT * FROM games WHERE gameID=?";
+    $sql2 = "SELECT paddle2 FROM games WHERE gameID=?";
 
     $request = $conn->prepare($sql);
     $request->execute([$dataArr["paddleY"], $_SESSION["gameID"]]);
@@ -29,6 +27,20 @@ if (isset($_GET["paddleY"])){
     $request2->execute([$_SESSION["id"]]);
 
     echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
+
+    die();
+}
+
+//code for just requesting coordinates and not inserting any
+if (isset($_GET["game"])){
+    $sql2 = "SELECT paddle2 FROM games WHERE gameID=?";
+
+    $request2 = $conn->prepare($sql2);
+    $request2->execute([$_SESSION["id"]]);
+
+    echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
+
+    die();
 }
 
 //code for when a user requests to play with another user
