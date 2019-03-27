@@ -1,3 +1,7 @@
+html {
+  margin: 0;
+}
+
 ul {
 list-style-type: none;
 margin: 0;
@@ -26,6 +30,7 @@ background-color: #111;
 * { box-sizing: border-box; }
 body {
   font: 16px Arial; 
+  margin: 0;
 }
 .autocomplete {
   /*the container must be positioned relative:*/
@@ -207,4 +212,13 @@ body {
   animation-name: text-fade;
   animation-duration: .4s;
   opacity: 0;
+}
+
+.index-wrapper-page {
+  display: flex;
+}
+
+/* Clear floats after the columns */
+.index-page-column {
+  flex: 50%;
 }

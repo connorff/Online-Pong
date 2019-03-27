@@ -1,37 +1,30 @@
 <?php
 session_start();
 $dataArr = $_POST;
-
-if (isset($dataArr["submit"])){
-    $conn = new PDO("mysql:host=localhost;dbname=pong-game", "pong", "pongPassBoys");
-
-    $sql = "SELECT COUNT(*) FROM games WHERE player1 = ? OR player2 = ?";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$dataArr["id"], $dataArr["id"]]);
-
-    if ($stmt->fetch()[0])
-        die("Person already in a game");
-    
-    $sql = "INSERT INTO games (gameID, player1, player2, paddle1, paddle2, score1, score2) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    
-    if ($stmt->execute([$_SESSION["id"], $_SESSION["id"], $dataArr["id"], 3, 3, 0, 0])){
-        $_SESSION["gameID"] = $_SESSION["id"];
-        $_SESSION["player"] = 1;
-        header("Location: game.php");
-    }
-    else {
-        echo "Error starting game";
-    }
-}
 ?>
+
 <html>
-    <form method="POST">
-        <input type="text" name="id" placeholder="ID Of Opponent">
-        <input type="submit" name="submit">
-    </form>
+    <head>
+        <title>Feed - <?php echo $_SESSION["username"]?></title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <ul>
+          <li><a class="active">Feed</a></li>
+          <li><a href="account.php">Account</a></li>
+          <li><a href="search.php">Search</a></li>
+          <li><a href="search.php">View Account</a></li>
+          <li><a href="about.php">About</a></li>
+        </ul>
+        <div class="index-wrapper-page">
+            <div class="index-page-column index-follow-feed">
+                <div class="index-follow-title"></div>
+            </div>
+            <div class="index-page-column index-self-feed">
+                <div class="index-self-title"></div>
+            </div>
+        </div>
+    </body>
 </html>
 <script>
 checkOnline();
