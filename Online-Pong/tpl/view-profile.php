@@ -31,6 +31,36 @@ $results = $req->fetchAll(PDO::FETCH_ASSOC);
 
 $timeOff = time() - $results[0]["lastOn"];
 
+$winsArr = [0, 5, 15, 25, 50, 100, 500, 1000];
+
+if ($results[0]["wins"] <= 0){
+    $userLevel = "Noob";
+}
+else if ($results[0]["wins"] < 5){
+    $userLevel = "Bot";
+}
+else if ($results[0]["wins"] < 15){
+    $userLevel = "Rookie";
+}
+else if ($results[0]["wins"] < 25){
+    $userLevel = "Average";
+}
+else if ($results[0]["wins"] < 50){
+    $userLevel = "Pretty Good";
+}
+else if ($results[0]["wins"] < 100){
+    $userLevel = "Legend";
+}
+else if ($results[0]["wins"] < 500){
+    $userLevel = "Master";
+}
+else if ($results[0]["wins"] < 1000){
+    $userLevel = "Sweaty Try-hard";
+}
+else {
+    $userLevel = "Must only play this game";
+}
+
 if ($timeOff < 45){
     $timeOff = "right now";
 }
@@ -56,4 +86,6 @@ else if ($timeOff < 50400){
 else {
     $timeOff = "more than a week ago";
 }
+
+$results["lastOn"] = $timeOff;
 ?>

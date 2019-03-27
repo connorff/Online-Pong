@@ -2,10 +2,8 @@ CREATE TABLE games (
     gameID INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     player1 VARCHAR(35) NOT NULL,
     player2 VARCHAR(35) NOT NULL,
-    paddle1X INT(4) NOT NULL,
-    paddle1Y INT(4) NOT NULL,
-    paddle2X INT(4) NOT NULL,
-    paddle2Y INT(4) NOT NULL
+    paddle1 DECIMAL(18, 16) NOT NULL,
+    paddle2 DECIMAL(18, 16) NOT NULL,
     score1 INT(2) NOT NULL,
     score2 INT(2) NOT NULL
 )

@@ -1,5 +1,5 @@
 window.onload = function () {
-    setInterval(draw, 17);
+    setInterval(draw, 60);
 }
 
 var xhr;
@@ -62,16 +62,6 @@ document.onkeyup = function (e) {
         case 40:
             paddle2[1] += 30;
             break;
-            
-        //when w is pressed
-        case 87:
-            paddle1[1] -= 30;
-            break;
-            
-        //when s is pressed
-        case 83:
-            paddle1[1] += 30;
-            break;
     }
 }
 
@@ -122,13 +112,14 @@ function draw() {
         traj[1] = -traj[1];
     }
 
-    xhr.open("POST", "data-parser.php", true);
+    xhr.open("GET", `data-parser.php?paddleY=${canvasH / paddle2[1]}`, true);
 
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200){
             console.log(this.responseText)
+            paddle1 = [canvasH / this.responseText[0]["paddle2"]];
         }
     }
 
-    xhr.send(`paddleX=${paddle1[0]}&paddleY=${paddle1[1]}&username`);
+    xhr.send();
 }

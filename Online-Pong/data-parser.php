@@ -1,23 +1,34 @@
 <?php
 session_start();
 
+//for production (prevents access by user)
+/*if ( $_SERVER['REQUEST_METHOD']=='GET' && realpath(__FILE__) == realpath( $_SERVER['SCRIPT_FILENAME'] ) ) {
+    header( 'HTTP/1.0 403 Forbidden', TRUE, 403 );
+
+    die( header("Location: index.php") );
+
+}*/
+
 //creates a PDO connection
 $conn = new PDO("mysql:host=localhost;dbname=pong-game", "pong", "pongPassBoys");
 
 //inserts data about the game to the database
-if (isset($_POST["traj"])){
-    $dataArr = $_POST;
+if (isset($_GET["paddleY"])){
+    $dataArr = $_GET;
     $dataArr["username"] = $_SESSION["username"];
-    
 
-    $sql = "UPDATE games SET (paddleX, paddleY) VALUES (?, ?) WHERE gameID=?;";
-    $sql2 = "SELECT * FROM paddlePositions WHERE username=?;";
+    echo $dataArr["paddleY"];
+
+    $sql = "UPDATE games SET paddle" . $_SESSION["player"] . " = ?  WHERE gameID=?";
+    $sql2 = "SELECT * FROM games WHERE gameID=?";
 
     $request = $conn->prepare($sql);
-    $request->execute([$dataArr["paddleX"], $dataArr["paddleY"], $dataArr["gameID"]]);
+    $request->execute([$dataArr["paddleY"], $_SESSION["gameID"]]);
 
     $request2 = $conn->prepare($sql2);
-    $request2->execute([$dataArr["username"]]);
+    $request2->execute([$_SESSION["id"]]);
+
+    echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
 }
 
 //code for when a user requests to play with another user

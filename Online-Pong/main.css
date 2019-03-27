@@ -126,6 +126,13 @@ body {
   color: blue;
 }
 
+.request-unfollow-button:hover{
+  animation-name: unfollow-hover;
+  animation-duration: .2s;
+  background-color: blue;
+  color: white;
+}
+
 @keyframes follow-hover{
   from {background-color: blue;}
   to {background-color: white;}
@@ -133,13 +140,71 @@ body {
   to {color: blue;}
 }
 
-.button-wrapper {
-  display: inline-block;
-  margin-left: auto;
-  margin-right: auto;
+@keyframes unfollow-hover{
+  from {background-color: white;}
+  to {background-color: blue;}
+  from {color: blue;}
+  to {color: white;}
 }
-.button-wrapper-second {
+
+.request-game-button {
   display: inline-block;
-  margin-left: auto;
-  margin-right: auto;
+  color: white;
+  border: solid darkgreen 2px;
+  border-radius: .5em;
+  width: auto;
+  height: auto;
+  font-size: 2em;
+  padding: .2em .5em .2em .5em;
+  background-color: #4CAF50;
+}
+
+.request-game-button:hover {
+  animation-name: game-hover;
+  animation-duration: .2s;
+  color: #4CAF50;
+  background-color: white;
+}
+
+@keyframes game-hover{
+  from {background-color: #4CAF50;}
+  to {background-color: white;}
+  from {color: white;}
+  to {color: #4CAF50;}
+}
+
+.user-level {
+  text-align: center;
+  color: darkblue;
+  font-size: 2em;
+}
+
+.button-group-outer {
+  width:100%;
+  text-align: center;
+}
+
+.button-group-inner {
+  display: inline-block;
+}
+
+.user-stats-wrapper {
+  text-align: center;
+  font-size: 1.4em;
+  margin-top: 1em;
+  margin-bottom: 2em;
+}
+.user-stats {
+  margin-top: 1em;
+}
+
+@keyframes text-fade{
+  from {opacity: 1;}
+  to {opacity: 0;}
+}
+
+.fade-text {
+  animation-name: text-fade;
+  animation-duration: .4s;
+  opacity: 0;
 }

@@ -14,41 +14,48 @@ if ($_GET["id"] === $_SESSION["id"])
         </head>
         <body>
         <ul>
-          <li><a href="#home">Feed</a></li>
-          <li><a href="#news">Account</a></li>
-          <li><a href="#contact">Search</a></li>
-          <li><a class="active" href="#about">View Account</a></li>
-          <li><a href="#about">About</a></li>
+          <li><a href="index.php">Feed</a></li>
+          <li><a href="account.php">Account</a></li>
+          <li><a href="search.php">Search</a></li>
+          <li><a class="active">View Account</a></li>
+          <li><a href="about.php">About</a></li>
         </ul>
         <div class="profile-wrapper">
-            <div class="profile-username">Connor</div>
+            <div class="profile-username"><?php echo $results["username"]?></div>
+            <br>
+            <div class="user-level">Level: <?php echo $userLevel;?></div>
+            <br>
             <div class="image-cropper">
               <img src="./pictures/VigilantDependentGartersnake-size_restricted-1.gif" alt="avatar" class="profile-pic">
             </div>
-            <div class="profile-wins"></div>
-            <div class="profile-lastOn">Online Right Now</div>
-            <div class="button-wrapper-second">
-                <div class="button-wrapper">
+            <br>
+            <div class="user-stats-wrapper">
+                <div class="user-stats">Wins: <?php echo $results["wins"]?></div>
+                <div class="user-stats">Last Seen: <?php echo $timeOff?></div>
+            </div>
+            <br>
+            <div class="button-group-outer">
+                <div class="button-group-inner">
                     <button class="request-game-button" onclick="reqGame()">Request Game</button>
-                    <div id="game-req-err"></div>
                 </div>
                 <?php 
                 if ($followsAlready === "0"){
                     ?>
-                    <div class="button-wrapper">
+                    <div class="button-group-inner">
                     <button class="request-follow-button" id="request-follow-button" onclick="followUser(true)">Follow</button>
-                    <div id="unfollow-user-err"></div>
                     <?php
                 }
                 else {
                     ?>
-                    <div class="button-wrapper">
+                    <div class="button-group-inner">
                     <button class="request-unfollow-button" id="request-follow-button" onclick="followUser(false)">Unfollow</button>
-                    <div id="unfollow-user-err"></div>
                     <?php
                 }
                 ?>
             </div>
+            <br>
+            <br>
+            <div id="errorText"></div>
         </div>
     </body>
 </html>
@@ -67,10 +74,10 @@ function reqGame(){
         if (xhr.readyState === 4 && xhr.status === 200){
             console.log(this.responseText);
             if (!Number(this.responseText)){
-                addErrorText("game-req-err", "There was an error when you requested a game, you may have already requested a game with them.", 5000);
+                addErrorText("There was an error when you requested a game, you may have already requested a game with them.", false, 5000);
             }
             else {
-                addErrorText("game-req-err", "Game requested", 2000);
+                addErrorText("Game requested", true, 2000);
             }
         }
     }
@@ -107,7 +114,7 @@ function followUser(follow){
 
             //if the response is not valid
             if (!Number(this.responseText)){
-                addErrorText("follow-user-err", "There was an error in your request", 3000);
+                addErrorText("There was an error in your request", false, 3000);
             }
             else {
                 if (follow){
@@ -116,7 +123,7 @@ function followUser(follow){
                     button.innerHTML = "Unfollow";
                     button.classList.remove("request-follow-button");
                     button.classList.add("request-unfollow-button");
-                    addErrorText("follow-user-err", "Followed user", 2000);
+                    addErrorText("Followed user", true, 2000);
                 }
                 else {
                     //if unfollowing the user
@@ -124,7 +131,7 @@ function followUser(follow){
                     button.innerHTML = "Follow";
                     button.classList.remove("request-unfollow-button");
                     button.classList.add("request-follow-button");
-                    addErrorText("follow-user-err", "Unfollowed user", 2000);
+                    addErrorText("Unfollowed user", true, 2000);
                 }
             }
         }
@@ -143,17 +150,29 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-function addErrorText(elId, text, timeout = 1000){
+function addErrorText(text, isGood, timeout = 1000){
+    
+    //checks if the timeout parameter is an actual number
     if(isNaN(timeout))
         timeout = 1000;
-    el = document.getElementById(elId)
-    if(!el)
-        return
+
+    el = document.getElementById("errorText")
+
+    //resets the element in case the text is being displayed right after another was
+    el.innerHTML = null;
+    el.className = "";
+
+    //changes the color of the text based on the parameter passed
+    el.style.color = isGood ? "blue" : "red";
     el.innerHTML = text;
     
+    //sets a timeout for the removal of the text
     setTimeout(function(){
         el.classList.add("fade-text");
-        el.innerHTML = null;
+        //sets another timeout for the duration of the css animation
+        setTimeout(function(){
+            el.innerHTML = null;
+        }, 300);
     }, timeout);
 }
 </script>
