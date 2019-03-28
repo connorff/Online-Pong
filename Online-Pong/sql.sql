@@ -35,3 +35,13 @@ CREATE TABLE gamelobby (
     orig INT(6) NOT NULL PRIMARY KEY,
     req INT(6) NOT NULL
 )
+
+CREATE TABLE inlobby (
+    orig INT(1) NOT NULL,
+    req INT(1) NOT NULL
+)
+
+CREATE TABLE gametime (
+    starttime INT(11) NOT NULL,
+    id INT(6) NOT NULL
+);
