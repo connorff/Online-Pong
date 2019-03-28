@@ -1,10 +1,9 @@
+
 <?php
 require "./tpl/game.tpl.php";
-
 if (!isset($_SESSION["id"])){
     header("Location: ./login.php");
 }
-
 if (!$inLobby){
     ?>
     <div class="game-err-text">Your opponent has left the lobby and is unable to play <a href="index.php">Return to home</a></div>
@@ -44,33 +43,39 @@ html, body {
 </body>
 <script src="main.js" type="application/javascript" charset="utf-8"></script>
 </html>
-<!-- <?php
-if (true){
-?>
 <script>
-if (window.XMLHttpRequest){
-    xhr = new XMLHttpRequest();
-}
-else {
-    xhr = new ActiveXObject("Microsoft.XMLHTTP")
+document.onload = function() {
+    setInterval(checkUser, 500);
 }
 
-xhr.open("GET", `data-parser.php?get=${canvasH / paddle2[1]}`, true);
-
-xhr.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200){
-        let json = JSON.parse(this.responseText);
-    }
+//checks if a user is in the game lobby
+function checkUser(){
+    const xhr;
+    
+	if (window.XMLHttpRequest){
+	    xhr = new XMLHttpRequest();
+	}
+	else {
+	    xhr = new ActiveXObject("Microsoft.XMLHttp")
+	}
+	
+	xhr.open("GET", `data-parser.php?ifUser=${<?php echo $dataArr["ansId"]?>}`, true);
+	
+	xhr.onreadystatechange => () {
+	    if (this.status === 200 && this.readyState === 4){
+	        let response = this.responseText;
+	        
+	        if (Boolean(response.bool)){
+	            return [true, "opponent has joined the game"];
+	        }
+	        else {
+	            return [false, response.res];
+	        }
+	    }
+	}
+	
+	xhr.send();
 }
-
-xhr.send();
-</script>
-
-<?php
-}
-?> -->
-<script>
-closeLobby();
 
 window.addEventListener("beforeunload", () => {
 	closeLobby();
@@ -78,19 +83,22 @@ window.addEventListener("beforeunload", () => {
 window.addEventListener("unload", () => {
 	closeLobby();
 });
-
 function closeLobby() {
     let data = new FormData();
     data.append("closeGame", "true");
-
 	if (typeof navigator.sendBeacon !== "undefined") {
 		// sendBeacon return boolean following the result
 		const success = navigator.sendBeacon("data-parser.php", data);
 	} else {
-		const xhr = new XMLHttpRequest();
+	    const xhr;
+		if (window.XMLHttpRequest){
+		    xhr = new XMLHttpRequest();
+		}
+		else {
+		    xhr = new ActiveXObject("Microsoft.XMLHttp")
+		}
         xhr.open("POST", DESTINATION_URL, false);
         xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
         xhr.send({closeGame: true});
 	}
 }
-</script>
