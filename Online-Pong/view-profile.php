@@ -57,6 +57,10 @@ if ($_GET["id"] === $_SESSION["id"])
             <br>
             <div id="errorText"></div>
         </div>
+        <form action="game.php" method="POST" style="display: none;" id="moveToGame">
+            <input type="text" name="ansId" id="ansId" readonly>
+            <input type="text" name="reqId" value="<?php echo $_SESSION["id"]?>" readonly>
+        </form>
     </body>
 </html>
 <script>
@@ -77,7 +81,8 @@ function reqGame(){
                 addErrorText("There was an error when you requested a game, you may have already requested a game with them.", false, 5000);
             }
             else {
-                window.location.href = "game.php?game=" + id;
+                document.getElementById("ansId").value = id;
+                document.getElementById("moveToGame").submit();
             }
         }
     }

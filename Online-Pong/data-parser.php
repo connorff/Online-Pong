@@ -163,7 +163,7 @@ if (isset($_POST["closeGame"])){
 }
 
 //code for checking if a user is in the game gamelobby
-if (isset($_GET["ifUser"])){
+if (isset($_GET["reqId"])){
     $dataArr = $_GET;
     
     //code for setting the user to be in the inlobby table
@@ -178,7 +178,7 @@ if (isset($_GET["ifUser"])){
         $stmt = $conn->prepare($sql);
         //if the inlobby row has been inserted
         if ($stmt->execute([$dataArr["reqId"], $dataArr["ansId"]])){
-            echo [1, "Created lobby and entered"];
+            echo json_encode([1, "Created lobby and entered"]);
         }
         else {
             echo [0, "failed creating lobby"];

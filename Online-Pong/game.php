@@ -1,10 +1,9 @@
-
 <?php
 require "./tpl/game.tpl.php";
 if (!isset($_SESSION["id"])){
     header("Location: ./login.php");
 }
-if (!$inLobby){
+if (isset($inLobby) && $isCreator){
     ?>
     <div class="game-err-text">Your opponent has left the lobby and is unable to play <a href="index.php">Return to home</a></div>
     <?php
@@ -41,29 +40,24 @@ html, body {
 <body>
 <canvas id="canvas" width="100%" height="100%"></canvas>
 </body>
-<script src="main.js" type="application/javascript" charset="utf-8"></script>
+<!-- <script src="main.js" type="application/javascript" charset="utf-8"></script> -->
 </html>
 <script>
-document.onload = function() {
-    setInterval(checkUser, 500);
-}
+let reqId = <?php echo $_POST["reqId"]?>;
+let ansId = <?php echo $_POST["ansId"]?>;
+
+setInterval(checkUser, 500);
 
 //checks if a user is in the game lobby
 function checkUser(){
-    const xhr;
-    
-	if (window.XMLHttpRequest){
-	    xhr = new XMLHttpRequest();
-	}
-	else {
-	    xhr = new ActiveXObject("Microsoft.XMLHttp")
-	}
+    const xhr = new XMLHttpRequest();
 	
-	xhr.open("GET", `data-parser.php?ifUser=${<?php echo $dataArr["ansId"]?>}`, true);
+	xhr.open("GET", `data-parser.php?reqId=${reqId}&ansId=${ansId}`, true);
 	
-	xhr.onreadystatechange => () {
-	    if (this.status === 200 && this.readyState === 4){
+	xhr.onreadystatechange = function() {
+	    if (this.status === 200 && this.readyState === 4){ 
 	        let response = this.responseText;
+            console.log(response);
 	        
 	        if (Boolean(response.bool)){
 	            return [true, "opponent has joined the game"];
@@ -76,7 +70,6 @@ function checkUser(){
 	
 	xhr.send();
 }
-
 window.addEventListener("beforeunload", () => {
 	closeLobby();
 });
@@ -90,15 +83,10 @@ function closeLobby() {
 		// sendBeacon return boolean following the result
 		const success = navigator.sendBeacon("data-parser.php", data);
 	} else {
-	    const xhr;
-		if (window.XMLHttpRequest){
-		    xhr = new XMLHttpRequest();
-		}
-		else {
-		    xhr = new ActiveXObject("Microsoft.XMLHttp")
-		}
+	    const xhr = new XMLHttpRequest();
         xhr.open("POST", DESTINATION_URL, false);
         xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
         xhr.send({closeGame: true});
 	}
 }
+</script>

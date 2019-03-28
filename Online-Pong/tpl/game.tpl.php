@@ -9,7 +9,7 @@ $dataArr = $_POST;
 
 //checks if user is creator of the lobby:
 if ($dataArr["reqId"] == $_SESSION["id"]){
-
+    $isCreator = true;
 }
 //checks if user is answerer of lobby
 else if ($dataArr["ansId"] == $_SESSION["id"]){
