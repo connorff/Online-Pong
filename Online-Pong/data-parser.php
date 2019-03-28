@@ -71,10 +71,10 @@ if (isset($_GET["usernameCheck"])){
 
 //code for refreshing people online
 if (isset($_GET["checkOnline"])){
-    $sql = "SELECT * FROM follow WHERE username=?";
+    $sql = "SELECT user2 FROM followRel WHERE user1=?";
 
     $req = $conn->prepare($sql);
-    $req->execute([$_SESSION["username"]]);
+    $req->execute([$_SESSION["id"]]);
 
     $follows = $req->fetchAll(PDO::FETCH_ASSOC);
 
@@ -106,7 +106,7 @@ if (isset($_GET["search"])){
 
 //code for requesting a game with someone
 if (isset($_GET["reqGame"])){
-    $sql2 = "SELECT COUNT(*) FROM gameReq WHERE orig = ? AND req = ?";
+    /*$sql2 = "SELECT COUNT(*) FROM gameReq WHERE orig = ? AND req = ?";
 
     $id = $_SESSION["id"];
 
@@ -123,7 +123,32 @@ if (isset($_GET["reqGame"])){
     $req = $conn->prepare($sql);
     $req->execute([time(), $id, $_GET["reqGame"]]);
 
-    echo 1;
+    echo 1; */
+
+    if ($_GET["reqGame"] == $_SESSION["id"]){
+        echo 0;
+        return;
+    }
+
+    $sql = "SELECT COUNT(*) FROM gamelobby WHERE req = ? OR orig = ?; DELETE FROM gamelobby WHERE orig = ?";
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt->execute([$_GET["reqGame"], $_GET["reqGame"], $_SESSION["id"]])){
+        echo 0;
+        return;
+    }
+
+    $sql = "INSERT INTO gamelobby (orig, req) VALUES (?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    
+    if ($stmt->execute([$_SESSION["id"], $_GET["reqGame"]])){
+        echo 1;
+    }
+    else {
+        echo 0;
+    }
 }
 
 //code for following and unfollowing a user with a given id using the session id
@@ -147,6 +172,7 @@ if (isset($_GET["followUser"])){
     }
     
     $sql = "SELECT COUNT(*) FROM followRel WHERE user1=? AND user2=?";
+
     $req = $conn->prepare($sql);
     $req->execute([$id, $followId]);
     
@@ -177,10 +203,10 @@ if (isset($_GET["followUser"])){
         return;
     }
     //follows the user
-    $sql = "INSERT INTO followRel (user1, user2) VALUES (?, ?)";
+    $sql = "INSERT INTO followRel (user1, user2, req) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
     
-    if($stmt->execute([$id, $followId])){
+    if($stmt->execute([$id, $followId, time()])){
         echo 1;
         return;
     }
@@ -188,5 +214,13 @@ if (isset($_GET["followUser"])){
         echo 0;
         return;
     }
+}
+
+if (isset($_POST["closeGame"])){
+    $sql = "DELETE FROM gamelobby WHERE req = ? OR orig = ?";
+
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$_SESSION["id"], $_SESSION["id"]]);
 }
 ?>

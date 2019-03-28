@@ -17,11 +17,6 @@ CREATE TABLE users (
     lastOn INT(11) NOT NULL
 )
 
-CREATE TABLE follow (
-    username VARCHAR(35) NOT NULL,
-    follow VARCHAR(35) NOT NULL
-)
-
 CREATE TABLE gameReq (
     timeReq INT(11) NOT NULL,
     orig INT(6) NOT NULL,
@@ -33,4 +28,10 @@ INSERT INTO gameReq (timeReq, orig, req) VALUES (100, 1, 2)
 CREATE TABLE followRel (
     user1 INT(10) NOT NULL,
     user2 INT(10) NOT NULL
+    req INT(11) NOT NULL
 );
+
+CREATE TABLE gamelobby (
+    orig INT(6) NOT NULL PRIMARY KEY,
+    req INT(6) NOT NULL
+)

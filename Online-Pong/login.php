@@ -20,7 +20,7 @@ if (isset($_POST["submit"])){
         $id = $getId->fetch()[0];
         $_SESSION["id"] = $id;
 
-        header("Location: ./game.php");
+        header("Location: ./index.php");
     }
     else {
         $errorArr["login"] = $signin; 

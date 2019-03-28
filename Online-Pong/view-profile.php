@@ -77,7 +77,7 @@ function reqGame(){
                 addErrorText("There was an error when you requested a game, you may have already requested a game with them.", false, 5000);
             }
             else {
-                addErrorText("Game requested", true, 2000);
+                window.location.href = "game.php?game=" + id;
             }
         }
     }
@@ -92,7 +92,7 @@ function followUser(follow){
     let button = document.getElementById("request-follow-button");
 
     //stores the id of the currently viewing user and creates a request variable
-    let id = getParameterByName("id"); //2
+    let id = getParameterByName("id");
     let xhr;
 
     //for browser compatability
@@ -111,7 +111,6 @@ function followUser(follow){
     //when the state of the request changes, this function fires
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200){
-
             //if the response is not valid
             if (!Number(this.responseText)){
                 addErrorText("There was an error in your request", false, 3000);

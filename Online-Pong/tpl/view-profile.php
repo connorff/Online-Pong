@@ -2,6 +2,7 @@
 session_start();
 $dataArr = $_GET;
 require "./inc/userManagement.class.php";
+require "./inc/functions.php";
 
 $User = new User();
 
@@ -61,31 +62,7 @@ else {
     $userLevel = "Must only play this game";
 }
 
-if ($timeOff < 45){
-    $timeOff = "right now";
-}
-else if ($timeOff < 250){
-    $timeOff = "less than 5 minutes ago";
-}
-else if ($timeOff < 750){
-    $timeOff = "less than 15 minutes ago";
-}
-else if ($timeOff < 1500){
-    $timeOff = "less than a half an hour ago";
-}
-else if ($timeOff < 3000){
-    $timeOff = "less than an hour ago";
-}
-else if ($timeOff < 7200){
-    $timeOff = "less than a day ago";
-}
-else if ($timeOff < 50400){
-    $daysAway = ceil($timeOff / 7200);
-    $timeOff = "less than " + $daysAway + " days ago";
-}
-else {
-    $timeOff = "more than a week ago";
-}
+$timeOff = getTime($timeOff);
 
 $results["lastOn"] = $timeOff;
 ?>

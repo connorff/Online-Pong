@@ -1,4 +1,4 @@
-window.onload = function () {   
+function startGame() {
     setInterval(draw, 17);
 
     setInterval(function() {

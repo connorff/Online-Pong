@@ -222,3 +222,58 @@ body {
 .index-page-column {
   flex: 50%;
 }
+
+.index-self-title{
+  color: #4CAF50;
+  text-align: center;
+  margin-top: .5em;
+  font-size: 3em;
+  margin-bottom: 1em;
+}
+.index-follow-title{
+  color: #0000FF;
+  text-align: center;
+  margin-top: .5em;
+  font-size: 3em;
+  margin-bottom: 1em;
+}
+
+.follow-user-block {
+  margin-top: 10px;
+  border-top: 2px black solid;
+  border-bottom: 2px black solid; 
+  padding: 6px 0 6px 0;
+  background-color: lightblue;
+}
+
+.follow-user-username{
+  display: inline-block;
+  width: 20%;
+  font-size: 1.8vw;
+}
+
+.follow-user-lastOn{
+  display: inline-block;
+  width: 50%;
+  font-size: 1.8vw;
+}
+
+.follow-user-profile-link{
+  display: inline-block;
+  width: 20%;
+  font-size: 1.8vw;
+}
+
+.followed-user-self {
+  display: inline-block;
+  width: 100%;
+  font-size: 1.8vw;
+}
+
+.self-user-block {
+  margin-top: 10px;
+  border-top: 2px black solid;
+  border-bottom: 2px black solid; 
+  padding: 6px 0 6px 6px;
+  background-color: lightgreen;
+}
