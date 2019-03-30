@@ -36,7 +36,7 @@ if ($_GET["id"] === $_SESSION["id"])
             <br>
             <div class="button-group-outer">
                 <div class="button-group-inner">
-                    <button class="request-game-button" onclick="reqGame()">Request Game</button>
+                    <button class="request-game-button" onclick="document.getElementById('moveToGame').submit()">Request Game</button>
                 </div>
                 <?php 
                 if ($followsAlready === "0"){
@@ -58,37 +58,12 @@ if ($_GET["id"] === $_SESSION["id"])
             <div id="errorText"></div>
         </div>
         <form action="game.php" method="POST" style="display: none;" id="moveToGame">
-            <input type="text" name="ansId" id="ansId" readonly>
+            <input type="text" name="ansId" id="ansId" value="<?php echo $dataArr["id"]?>" readonly>
             <input type="text" name="reqId" value="<?php echo $_SESSION["id"]?>" readonly>
         </form>
     </body>
 </html>
 <script>
-function reqGame(){
-    let id = getParameterByName("id");
-    let xhr;
-    if (window.XMLHttpRequest){
-        xhr = new XMLHttpRequest();
-    }
-    else {
-        xhr = new ActiveXObject("Microsoft.XMLHttp");
-    }
-    xhr.open("GET", "data-parser.php?reqGame=" + id, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200){
-            console.log(this.responseText);
-            if (!Number(this.responseText)){
-                addErrorText("There was an error when you requested a game, you may have already requested a game with them.", false, 5000);
-            }
-            else {
-                document.getElementById("ansId").value = id;
-                document.getElementById("moveToGame").submit();
-            }
-        }
-    }
-    xhr.send();
-}
-
 let followGlobal = null;
 
 //code for when a user wants to unfollow another user

@@ -78,7 +78,7 @@ if(count($requestedGames)){
 
         $result = $stmt->fetch()[0];
         
-        $arr["reqId"] = $result;
+        $arr["reqUsername"] = $result;
 
         $newArr = array($time => $arr);
 

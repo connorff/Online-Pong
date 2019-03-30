@@ -10,28 +10,6 @@ if (isset($inLobby) && $isCreator){
 }
 ?>
 <!DOCTYPE html>
-<style type="text/css" media="all">
-/* html, body {
-    overflow: hidden;
-}
-#canvas {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border: solid black 2px;
-    margin: 0;
-}
-html {
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-}
-html, body {
-    height: 100%;
-    margin: 0;
-} */
-</style>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,10 +21,12 @@ html, body {
 <!-- <script src="main.js" type="application/javascript" charset="utf-8"></script> -->
 </html>
 <script>
-let reqId = <?php echo $_POST["reqId"]?>;
+let reqId = <?php echo (String)$_POST["reqId"]?>;
 let ansId = <?php echo $_POST["ansId"]?>;
 
-setInterval(checkUser, 500);
+let checkUserInt = setInterval(checkUser, 500);
+let unixLength = new Date().getTime().length;
+let timeToStart = null;
 
 //checks if a user is in the game lobby
 function checkUser(){
@@ -56,15 +36,23 @@ function checkUser(){
 	
 	xhr.onreadystatechange = function() {
 	    if (this.status === 200 && this.readyState === 4){ 
-	        let response = this.responseText;
-            console.log(response);
-	        
-	        if (Boolean(response.bool)){
-	            return [true, "opponent has joined the game"];
-	        }
-	        else {
-	            return [false, response.res];
-	        }
+	        let response = JSON.parse(this.responseText);
+            console.log(response[1]);
+
+            //for the answerer: if they already set the time, stops setting it
+            if (response[1] === "Start time inserted into the database"){
+                console.log("stop")
+                clearInterval(checkUserInt);
+            }
+            
+            //for the creator: if the time has been set, stops querying the database
+
+            response[1] = parseInt(response[1]);
+
+            if (!isNaN(response[1]) && response[1].length === unixLength){
+                clearInterval(checkUserInt);
+                timeToStart = response[1];
+            }
 	    }
 	}
 	

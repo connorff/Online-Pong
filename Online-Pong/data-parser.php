@@ -157,31 +157,81 @@ if (isset($_GET["followUser"])){
     }
 }
 if (isset($_POST["closeGame"])){
-    $sql = "DELETE FROM gamelobby WHERE req = ? OR orig = ?";
+    //deletes all stuff related to the game
+    $sql = "DELETE FROM gamelobby WHERE req = ? OR orig = ?; DELETE FROM inlobby WHERE orig = ? OR req = ?; DELETE FROM games WHERE player1 = ? OR player2 = ?;";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$_SESSION["id"], $_SESSION["id"]]);
+    $stmt->execute([$_SESSION["id"], $_SESSION["id"], $_SESSION["id"], $_SESSION["id"], $_SESSION["id"], $_SESSION["id"]]);
 }
 
-//code for checking if a user is in the game gamelobby
+//code for checking if a user is in the game inlobby
 if (isset($_GET["reqId"])){
     $dataArr = $_GET;
-    
-    //code for setting the user to be in the inlobby table
     
     //checks if the user is the creator 
     $isCreator = $dataArr["reqId"] == $_SESSION["id"];
     
     //if the user is the creator of the lobby
     if ($isCreator){
-        $sql = "INSERT INTO inlobby (orig, req) VALUES (?, ?)";
-        
+        $sql = "SELECT COUNT(*) FROM inlobby WHERE orig = ?";
+
         $stmt = $conn->prepare($sql);
-        //if the inlobby row has been inserted
-        if ($stmt->execute([$dataArr["reqId"], $dataArr["ansId"]])){
-            echo json_encode([1, "Created lobby and entered"]);
+        
+        if($stmt->execute([$dataArr["reqId"]])){
+            $alreadyInLobby = $stmt->fetch()[0];
+        }
+
+        if (!$alreadyInLobby){
+            $sql = "INSERT INTO inlobby (orig, req) VALUES (?, 0)";
+        
+            $stmt = $conn->prepare($sql);
+            //if the inlobby row has been inserted
+            if ($stmt->execute([$dataArr["reqId"]])){
+                echo json_encode([1, "Created lobby and entered"]);
+            }
+            else {
+                echo [0, "failed creating lobby"];
+                return;
+            }
+        }
+
+        //code for checking if the opponent has entered the lobby
+
+        $sql = "SELECT COUNT(*) FROM inlobby WHERE orig = ? AND req <> 0";
+
+        $stmt = $conn->prepare($sql);
+        
+        if ($stmt->execute([$dataArr["reqId"]])){
+            $isInLobby = $stmt->fetch()[0];
+        }
+
+        if ($isInLobby){
+            //gets the time that has been set by the other person
+            $sql = "SELECT starttime FROM gametime WHERE id = ?";
+            
+            $stmt = $conn->prepare($sql);
+            
+            //if the start time request went through
+            if ($stmt->execute([$dataArr["reqId"]])){
+                $startTime = $stmt->fetch()[0];
+                
+                if ($startTime === null){
+                    echo json_encode([1, "Start time has not been set yet"]);
+                    return;
+                }
+                else {
+                    //echoes the start time
+                    echo json_encode([1, $startTime]);
+                    return;
+                }
+            }
+            //if the time request for time failed
+            else {
+                echo json_encode([0, "Could not get start time from database"]);
+                return;
+            }
         }
         else {
-            echo [0, "failed creating lobby"];
+            echo json_encode([1, "Opponent is not in lobby yet"]);
             return;
         }
     }
@@ -191,36 +241,27 @@ if (isset($_GET["reqId"])){
         $sql = "UPDATE inlobby SET req = ? WHERE orig = ?";
         
         $stmt = $conn->prepare($sql);
+
         //if the table has been updated
-        if ($stmt->execute($dataArr["ansId"], [$dataArr["reqId"]])){
+        if ($stmt->execute([$dataArr["ansId"], $dataArr["reqId"]])){
             //deletes from game requests
             $sql = "DELETE FROM gamereq WHERE orig = ? AND req = ?";
             
             $stmt = $conn->prepare($sql);
             
-            //gets the time that has been set by the other person
-            $sql2 = "SELECT starttime FROM gametime WHERE id = ?";
-            
-            $stmt2 = $conn->prepare($sql2);
-            
-            $startTime;
-            
-            //if the start time request went through
-            if ($stmt2->execute($dataArr["reqId"])){
-                $startTime = $stmt2->fetch()[0];
-                
-                //echoes the start time
-                echo [1, $startTime];
-            }
-            //if the time requset for time failed
-            else {
-                echo [false, "Could not get start time from database"];
-                return;
-            }
-            
-            //since the time request went through, deletes request from database
+            //if the deletion went through, sets the start time
             if ($stmt->execute([$dataArr["reqId"], $dataArr["ansId"]])){
-                echo [true, $startTime]; 
+                $sql = "INSERT INTO gametime (id, starttime) VALUES (?, ?)";
+                
+                $stmt = $conn->prepare($sql);
+
+                //if the start time was inserted into the database
+                if ($stmt->execute([$dataArr["reqId"], time()])){
+                    echo json_encode([1, "Start time inserted into the database"]);
+                }
+                else {
+                    echo json_encode([1, "Failed to insert the start time into the database"]);
+                }
             }
             else {
                 echo [false, "could not delete from game requests"];

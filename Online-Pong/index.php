@@ -58,10 +58,10 @@ $dataArr = $_POST;
                     else if (isset($arr["orig"])){
                         ?>
                         <div class="self-user-block">
-                            <div class="followed-user-self"><?php echo $arr["reqId"]?> wants to play a game <a onclick="document.getElementById('form<?php echo $formCount?>').submit()" style="float: right;padding-right: 20px;text-decoration:underline;color:blue;">Play</a></div>
+                            <div class="followed-user-self"><?php echo $arr["reqUsername"]?> wants to play a game <a onclick="document.getElementById('form<?php echo $formCount?>').submit()" style="float: right;padding-right: 20px;text-decoration:underline;color:blue;">Play</a></div>
                         </div>
                         <form action="./game.php" method="POST" style="display: none" id="form<?php echo $formCount?>">
-                            <input type="text" value="<?php echo $arr["reqId"]?>" name="reqId" readonly>
+                            <input type="text" value="<?php echo $arr["orig"]?>" name="reqId" readonly>
                             <input type="text" value="<?php echo $_SESSION["id"]?>" name="ansId" readonly>
                         </form>
                         <?php
