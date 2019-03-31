@@ -1,8 +1,8 @@
 <?php
 session_start();
 $dataArr = $_GET;
-require "./inc/userManagement.class.php";
-require "./inc/functions.php";
+require "../inc/userManagement.class.php";
+require "../inc/functions.php";
 
 $User = new User();
 

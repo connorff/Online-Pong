@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "./inc/functions.php";
+require "../inc/functions.php";
 
 $globalArr = array();
 
