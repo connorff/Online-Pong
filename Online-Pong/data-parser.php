@@ -6,27 +6,57 @@ session_start();
     die( header("Location: index.php") );
 }*/
 //creates a PDO connection
-$conn = new PDO("mysql:host=localhost;dbname=pong-game", "pong", "pongPassBoys");
+$conn = new PDO("mysql:host=localhost;dbname=pong-game;charset=utf8", "pong", "pongPassBoys");
 //inserts data about the game to the database
 if (isset($_GET["paddleY"])){
     $dataArr = $_GET;
-    $dataArr["username"] = $_SESSION["username"];
-    $sql = "UPDATE games SET paddle" . $_SESSION["player"] . " = ?  WHERE gameID=?";
-    $sql2 = "SELECT paddle2 FROM games WHERE gameID=?";
-    $request = $conn->prepare($sql);
-    $request->execute([$dataArr["paddleY"], $_SESSION["gameID"]]);
-    $request2 = $conn->prepare($sql2);
-    $request2->execute([$_SESSION["id"]]);
-    echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
-    die();
+
+    //code for player 1
+    if ($dataArr["player"] == 1){
+        $dataArr["username"] = $_SESSION["username"];
+        $sql = "UPDATE games SET paddle" . $dataArr["player"] . " = ?  WHERE gameID=?";
+        $sql2 = "SELECT paddle2 FROM games WHERE gameID=?";
+        $request = $conn->prepare($sql);
+        $request->execute([$dataArr["paddleY"], $_SESSION["gameID"]]);
+        $request2 = $conn->prepare($sql2);
+        $request2->execute([$_SESSION["gameID"]]);
+        echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
+        die();
+    }
+    //code for player 2
+    else if ($dataArr["player"] == 2){
+        $dataArr["username"] = $_SESSION["username"];
+        $sql = "UPDATE games SET paddle" . $dataArr["player"] . " = ?  WHERE gameID=?";
+        $sql2 = "SELECT paddle1 FROM games WHERE gameID=?";
+        $request = $conn->prepare($sql);
+        $request->execute([$dataArr["paddleY"], $_SESSION["gameID"]]);
+        $request2 = $conn->prepare($sql2);
+        $request2->execute([$_SESSION["gameID"]]);
+        echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
+        die();
+    }
+    else {
+        return;
+    }
 }
 //code for just requesting coordinates and not inserting any
 if (isset($_GET["game"])){
-    $sql2 = "SELECT paddle2 FROM games WHERE gameID=?";
-    $request2 = $conn->prepare($sql2);
-    $request2->execute([$_SESSION["id"]]);
-    echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
-    die();
+    $dataArr = $_GET;
+
+    if ($dataArr["player"] == 2){
+        $sql2 = "SELECT paddle1 FROM games WHERE gameID=?";
+        $request2 = $conn->prepare($sql2);
+        $request2->execute([$_SESSION["gameID"]]);
+        echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
+        die();
+    }
+    else if ($dataArr["player"] == 1){
+        $sql2 = "SELECT paddle2 FROM games WHERE gameID=?";
+        $request2 = $conn->prepare($sql2);
+        $request2->execute([$_SESSION["gameID"]]);
+        echo json_encode($request2->fetchAll(PDO::FETCH_ASSOC));
+        die();
+    }
 }
 //code for when a user requests to play with another user
 if (!isset($_GET["requestGame"])){
@@ -158,7 +188,7 @@ if (isset($_GET["followUser"])){
 }
 if (isset($_POST["closeGame"])){
     //deletes all stuff related to the game
-    $sql = "DELETE FROM gamelobby WHERE req = ? OR orig = ?; DELETE FROM inlobby WHERE orig = ? OR req = ?; DELETE FROM games WHERE player1 = ? OR player2 = ?;";
+    $sql = "DELETE FROM gamelobby WHERE req = ? OR orig = ?; DELETE FROM inlobby WHERE orig = ? OR req = ?;";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$_SESSION["id"], $_SESSION["id"], $_SESSION["id"], $_SESSION["id"], $_SESSION["id"], $_SESSION["id"]]);
 }
@@ -251,12 +281,12 @@ if (isset($_GET["reqId"])){
             
             //if the deletion went through, sets the start time
             if ($stmt->execute([$dataArr["reqId"], $dataArr["ansId"]])){
-                $sql = "INSERT INTO gametime (id, starttime) VALUES (?, ?)";
+                $sql = "DELETE FROM gametime WHERE id = ?; INSERT INTO gametime (id, starttime) VALUES (?, ?)";
                 
                 $stmt = $conn->prepare($sql);
 
                 //if the start time was inserted into the database
-                if ($stmt->execute([$dataArr["reqId"], time()])){
+                if ($stmt->execute([$dataArr["reqId"], $dataArr["reqId"], time()])){
                     echo json_encode([1, "Start time inserted into the database"]);
                 }
                 else {

@@ -1,7 +1,14 @@
-//let canvas = document.getElementById("canvas")
+/* 
+
+This is the file for the second player
+They are the one that accepts the request to the game
+They control the paddle on the left
+
+*/
+
+let canvas = document.getElementById("canvas")
 let ctx = canvas.getContext("2d")
 let ballRad = null;
-let user;
 
 sizeCanvas();
 startGame();
@@ -10,12 +17,12 @@ function startGame() {
     setInterval(draw, 17);
 
     setInterval(function() {
-        if (paddle2[1] !== storedY){
-            storedY = paddle2[1];
+        if (paddle1[1] !== storedY){
+            storedY = paddle1[1];
             getData(true);
         }
         else {
-            storedY = paddle2[1];
+            storedY = paddle1[1];
             getData(false);
         }
     }, 100);
@@ -70,7 +77,7 @@ let paddle2 = [canvasW * (48/50), canvasH / 3];
 let traj = Math.floor(Math.random() * 3);
 
 //creates a variable to store the y value from last refresh
-var storedY = paddle2[1];
+var storedY = paddle1[1];
 
 if (window.XMLHttpRequest){
     xhr = new XMLHttpRequest();
@@ -101,12 +108,12 @@ document.onkeydown = function (e) {
     switch(e.keyCode) {
         //when up arrow is pressed
         case 38:
-            paddle2[1] -= 30;
+            paddle1[1] -= 30;
             break;
         
         //when down arrow is pressed
         case 40:
-            paddle2[1] += 30;
+            paddle1[1] += 30;
             break;
     }
 }
@@ -165,17 +172,17 @@ function getData(send){
         send = false;
     
     if(send){
-        xhr.open("GET", `data-parser.php?paddleY=${canvasH / paddle2[1]}&player=2`, true);
+        xhr.open("GET", `data-parser.php?paddleY=${canvasH / paddle1[1]}&player=1`, true);
     }
     else {
-        xhr.open("GET", `data-parser.php?game=${true}&player=2`, true);
+        xhr.open("GET", `data-parser.php?game=${true}&player=1`, true);
     }
 
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200){
             let json = JSON.parse(this.responseText);
 
-            paddle1[1] = [Math.floor(canvasH / json[0].paddle1)][0];
+            paddle2[1] = [Math.floor(canvasH / json[0].paddle2)][0];
         }
     }
 

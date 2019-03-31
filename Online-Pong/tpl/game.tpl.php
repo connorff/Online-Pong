@@ -12,7 +12,14 @@ $isInLobby = null;
 
 //checks if user is creator of the lobby:
 if ($dataArr["reqId"] == $_SESSION["id"]){
+    $sql = "DELETE FROM inlobby WHERE orig = ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$_SESSION["id"]]);
+
     $isCreator = true;
+    $_SESSION["player"] = 1;
+    $_SESSION["gameID"] = $_SESSION["id"];
 }
 //checks if user is answerer of lobby
 else if ($dataArr["ansId"] == $_SESSION["id"]){
@@ -27,6 +34,16 @@ else if ($dataArr["ansId"] == $_SESSION["id"]){
     if ($isInLobby){
         $sql = "DELETE FROM gamereq WHERE orig = ? and req = ?";
     }
+
+    //creates a game row for storing values of the game
+    $sql = "INSERT INTO games (gameID, player1, player2, paddle1, paddle2, score1, score2) VALUES (?, ?, ?, 3, 3, 0, 0);";
+
+    $stmt = $conn->prepare($sql);
+
+    $stmt->execute([$dataArr["reqId"], $dataArr["reqId"], $dataArr["ansId"]]);
+
+    $_SESSION["player"] = 2;
+    $_SESSION["gameID"] = $dataArr["reqId"];
 }
 else {
     header("Location: index.php");
@@ -35,7 +52,7 @@ else {
 //checks to make sure params are set
 if (isset($dataArr["reqId"]) && isset($dataArr["ansId"]) && $isCreator){
     if ($dataArr["ansId"] == $_SESSION["id"]){
-        echo "requestig game with self";
+        echo "can't request a game with yourself!";
     }
 
     //creates a request in the db
@@ -52,12 +69,7 @@ if (isset($dataArr["reqId"]) && isset($dataArr["ansId"]) && $isCreator){
             $sql = "INSERT INTO gamelobby (orig, req) VALUES (?, ?)";
             $stmt = $conn->prepare($sql);
             
-            if ($stmt->execute([$_SESSION["id"], $dataArr["ansId"]])){
-                echo 1;
-            }
-            else {
-                echo 0;
-            }
+            $stmt->execute([$_SESSION["id"], $dataArr["ansId"]]);
         }
     }
 }
