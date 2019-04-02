@@ -32,7 +32,7 @@ if (isset($_POST["submit"])){
         <title>Log In</title>
     </head>
     <body>
-        <!--<?php
+        <?php
         if (count($errorArr)){
             ?>
             Errors: <ol>
@@ -49,7 +49,7 @@ if (isset($_POST["submit"])){
             </ol>
             <?php
         }
-        ?> -->
+        ?>
         <div class="login-title">Log In</div>
         <form method="POST" id="login-form">
             <input autocomplete="off" id="username-input" type="text" name="username" placeholder="username" class="login-input input-center" onkeyup="checkUsername(this.value)" required>
