@@ -277,3 +277,66 @@ body {
   padding: 6px 0 6px 6px;
   background-color: lightgreen;
 }
+.login-input {
+    padding: 5px;
+    width: 10em;
+    font-size: 2em;
+    border-radius: .3em;
+    border: .03em #4CAF50 solid;
+    color: #4CAF50;
+}
+.input-center{
+    display: block;
+    margin: 5px auto 5px auto;
+}
+.button{
+    background-position-y: -100%;
+    background: linear-gradient(#4CAF50, #0000FF);
+    background-size: auto 200%;
+    animation-name: button-unhover-login;
+    animation-duration: .5s;
+    background-position-y: 0%;
+    height: 2em;
+    width: auto;
+    padding: 0 10px 0 10px;
+    font-size: 1em;
+    border-radius: .7em;
+    border: solid black 1px;
+    color: black;
+    display: block;
+    margin: 0 auto 5px auto;
+}
+.button:hover{
+    background-position-y: 0%;
+    animation-name: button-hover-login;
+    animation-duration: .5s;
+    background-position-y: 100%;
+}
+@keyframes button-unhover-login{
+    from {background-position-y: -100%;}
+    to {background-position-y: 0%;}
+}
+@keyframes button-hover-login{
+    from {background-position-y: 0%;}
+    to {background-position-y: -100%;}
+}
+.link-container-center {
+    display: center;
+    margin: 0 auto 0 auto;
+    text-align: center;
+}
+.login-title{
+    text-align: center;
+    color: #4CAF50;
+    font-size: 4em;
+    margin-bottom: 20;
+}
+@keyframes fade-out-text{
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+.fade-out {
+    animation-name: fade-out-text !important;
+    animation-duration: .5s !important;
+    opacity: 0 !important;
+}
