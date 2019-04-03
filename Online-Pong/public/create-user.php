@@ -3,24 +3,24 @@ session_start();
 require "../inc/userManagement.class.php";
 $dataArr = $_POST;
 $errorArr = [];
-
 if (isset($_POST["submit"])){
     $user = new User();
-
     $createUser = $user->createUser($dataArr["username"], $dataArr["password"], $dataArr["email"]);
-
     if ($createUser != 1) {
         $errorArr["createUser"] = $createUser;
     }
     else {
         $_SESSION["username"] = $dataArr["username"];
         $_SESSION["id"] = $id;
-
         header("Location: ./game.php");
     }
 }
 ?>
 <html>
+<head>
+<link rel="stylesheet" href="main.css">
+<title>Create User</title>
+</head>
 <body>
     <form method="POST">
         <!--<?php
@@ -56,7 +56,6 @@ if (isset($_POST["submit"])){
 </html>
 <script>
 let formGood = false; 
-
 function checkUser(str, submit = false){
     //code for checking if the username is valid
     let error = document.getElementById("username-error");
@@ -96,10 +95,10 @@ function checkUser(str, submit = false){
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200){
             if (this.responseText != 0){
-                document.getElementById("error-username").innerHTML = "Username already exists!";
+                document.getElementById("username-error").innerHTML = "Username already exists!";
             }
             else {               
-                document.getElementById("error-username").innerHTML = null;
+                document.getElementById("username-error").innerHTML = null;
             }
         }
     }
@@ -125,10 +124,9 @@ function checkEmail(email, submit = false){
         error.innerHTML = null;
     }
 }
-
 //function for sending the form
 function submit() {
-    checkUsername(document.getElementById("username-input").value, true);
+    checkUser(document.getElementById("username-input").value, true);
     checkEmail(document.getElementById("email-input").value, true);
     alert(formGood)
     

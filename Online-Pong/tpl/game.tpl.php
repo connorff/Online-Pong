@@ -32,8 +32,8 @@ else if ($dataArr["ansId"] == $_SESSION["id"]){
 
     $inLobby = $stmt->fetch()[0];
 
-    if ($isInLobby){
-        $sql = "DELETE FROM gamereq WHERE orig = ? and req = ?";
+    if (!$inLobby){
+        echo "User not in lobby";
     }
     
     //sets the inlobby db to let the creator know they have entered the lobby
@@ -41,12 +41,18 @@ else if ($dataArr["ansId"] == $_SESSION["id"]){
     
     $stmt = $conn->prepare($sql);
 
+    if (!$stmt->execute([$dataArr["ansId"], $dataArr["reqId"]])){
+        echo "Could not update lobby";
+    }
+
     //if the table has been updated
     if ($stmt->execute([$dataArr["ansId"], $dataArr["reqId"]])){
         //deletes from game requests
         $sql = "DELETE FROM gamereq WHERE orig = ? AND req = ?";
         
         $stmt = $conn->prepare($sql);
+
+        $stmt->execute([$dataArr["reqId"], $dataArr["ansId"]]);
         
         //if the deletion went through, sets the start time
         if ($stmt->execute([$dataArr["reqId"], $dataArr["ansId"]])){
