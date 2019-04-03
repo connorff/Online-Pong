@@ -30,6 +30,7 @@ if (isset($_POST["submit"])){
 <html>
     <head>
         <title>Log In</title>
+        <link rel="stylesheet" href="main.css">
     </head>
     <body>
         <?php
