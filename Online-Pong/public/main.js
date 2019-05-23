@@ -175,8 +175,6 @@ function getData(send){
         if (this.readyState === 4 && this.status === 200){
             let json = JSON.parse(this.responseText);
 
-            console.log(json);
-
             paddle1[1] = [Math.floor(canvasH / json[0].paddle1)][0];
         }
     }

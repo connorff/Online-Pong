@@ -234,42 +234,5 @@ class Data {
                 return;
             }
         }
-        //if the user is not the creator of the lobby
-        /*else {
-            //sets the inlobby db to let the creator know they have entered the lobby
-            $sql = "UPDATE inlobby SET req = ? WHERE orig = ?";
-            
-            $stmt = $this->conn->prepare($sql);
-
-            //if the table has been updated
-            if ($stmt->execute([$dataArr["ansId"], $reqId])){
-                //deletes from game requests
-                $sql = "DELETE FROM gamereq WHERE orig = ? AND req = ?";
-                
-                $stmt = $this->conn->prepare($sql);
-                
-                //if the deletion went through, sets the start time
-                if ($stmt->execute([$reqId, $dataArr["ansId"]])){
-                    $sql = "DELETE FROM gametime WHERE id = ?; INSERT INTO gametime (id, starttime) VALUES (?, ?)";
-                    
-                    $stmt = $this->conn->prepare($sql);
-
-                    //if the start time was inserted into the database
-                    if ($stmt->execute([$reqId, $reqId, time()])){
-                        echo json_encode([1, "Start time inserted into the database"]);
-                    }
-                    else {
-                        echo json_encode([1, "Failed to insert the start time into the database"]);
-                    }
-                }
-                else {
-                    echo [false, "could not delete from game requests"];
-                }
-            }
-            else {
-                echo [0, "failed joining lobby"];
-                return;
-            }
-        }*/
     }
 }

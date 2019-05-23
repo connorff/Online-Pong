@@ -22,7 +22,6 @@ $jsFile = $userNum ? "main.js" : "main.1.js";
         margin: 0;
         height: 100%;
         overflow: hidden;
-        position: relative;
     }
 
     body {
@@ -30,15 +29,12 @@ $jsFile = $userNum ? "main.js" : "main.1.js";
         margin: 0;
         height: 100%;
         overflow: hidden;
-        position: relative;
     }
 
     #canvas {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        overflow: hidden;
-        position: relative;
     }
     </style>
     <meta charset="UTF-8">
@@ -62,8 +58,6 @@ setTimeout(() => {
     canvas.style.display = "block";
     canvas.style.margin = "auto";
 
-    document.body.style.margin = 0;
-    document.body.style.padding = 0;
     document.body.innerHTML = "";
     canvas.style.padding = 0;
     canvas.style.margin = 0;
@@ -115,8 +109,6 @@ function checkUser(){
                     canvas.style.display = "block";
                     canvas.style.margin = "auto";
 
-                    document.body.style.margin = 0;
-                    document.body.style.padding = 0;
                     document.body.innerHTML = "";
                     canvas.style.padding = 0;
                     canvas.style.margin = 0;
